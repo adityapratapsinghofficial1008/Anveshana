@@ -2,13 +2,20 @@ import nodemailer from 'nodemailer'
 import { env } from '../config/env.js'
 
 const transport =
-  env.smtp.host && env.smtp.user && env.smtp.pass
-    ? nodemailer.createTransport({
-        host: env.smtp.host,
-        port: env.smtp.port,
-        secure: env.smtp.port === 465,
-        auth: { user: env.smtp.user, pass: env.smtp.pass },
-      })
+  env.smtp.user && env.smtp.pass
+    ? nodemailer.createTransport(
+      env.smtp.host === 'smtp.gmail.com'
+        ? {
+          service: 'gmail',
+          auth: { user: env.smtp.user, pass: env.smtp.pass },
+        }
+        : {
+          host: env.smtp.host,
+          port: env.smtp.port || 465,
+          secure: env.smtp.port === 465,
+          auth: { user: env.smtp.user, pass: env.smtp.pass },
+        },
+    )
     : null
 
 /**
