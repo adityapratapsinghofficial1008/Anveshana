@@ -11,9 +11,15 @@ import Footer from './components/layout/Footer'
 import Navbar from './components/layout/Navbar'
 import CustomCursor from './components/ui/CustomCursor'
 import { useScrollReveal } from './hooks/useScrollReveal'
+import { warmupServer } from './lib/api'
+import { useEffect } from 'react'
 
 export default function App() {
   const scope = useScrollReveal()
+
+  useEffect(() => {
+    warmupServer()
+  }, [])
 
   return (
     <>

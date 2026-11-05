@@ -32,3 +32,12 @@ export async function joinCommunity(payload) {
 
   return data
 }
+
+/**
+ * Silently warms up the backend when a user arrives on the site.
+ * If the free server is asleep (e.g., Render free tier), this triggers
+ * its boot sequence in the background while the visitor is reading.
+ */
+export function warmupServer() {
+  fetch(`${API_BASE}/health`, { method: 'GET' }).catch(() => {})
+}
