@@ -1,0 +1,118 @@
+/* --------------------------------------------------------------- cursor */
+.cursor {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s var(--ease-out);
+}
+
+.cursor.is-visible {
+  opacity: 1;
+}
+
+.cursor__dot,
+.cursor__ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.cursor__dot-core {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--amber);
+  transform: translate(-50%, -50%);
+  transition:
+    transform 0.28s var(--ease-out),
+    opacity 0.2s var(--ease-out);
+}
+
+.cursor__ring-core {
+  display: block;
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid var(--clay);
+  border-radius: 50%;
+  background: transparent;
+  transform: translate(-50%, -50%);
+  transition:
+    transform 0.28s var(--ease-out),
+    width 0.28s var(--ease-out),
+    height 0.28s var(--ease-out),
+    border-radius 0.28s var(--ease-out),
+    border-color 0.25s var(--ease-out),
+    background-color 0.25s var(--ease-out);
+}
+
+.cursor.is-hover .cursor__ring-core {
+  border-color: var(--amber);
+  background: rgba(217, 154, 43, 0.12);
+  transform: translate(-50%, -50%) scale(1.55);
+}
+
+.cursor.is-hover .cursor__dot-core {
+  opacity: 0.9;
+  transform: translate(-50%, -50%) scale(0.5);
+}
+
+.cursor.is-text .cursor__dot-core {
+  opacity: 0;
+}
+
+.cursor.is-text .cursor__ring-core {
+  width: 2px;
+  height: 26px;
+  border-color: transparent;
+  border-radius: 2px;
+  background: var(--clay);
+  transform: translate(-50%, -50%);
+}
+
+.cursor.is-pressed .cursor__ring-core {
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+.cursor.is-hover.is-pressed .cursor__ring-core {
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+/* Replace the native pointer only while the effect is active. */
+html.has-custom-cursor,
+html.has-custom-cursor body {
+  cursor: none;
+}
+
+html.has-custom-cursor a,
+html.has-custom-cursor button,
+html.has-custom-cursor [role='button'],
+html.has-custom-cursor summary,
+html.has-custom-cursor select,
+html.has-custom-cursor input,
+html.has-custom-cursor textarea,
+html.has-custom-cursor [contenteditable='true'] {
+  cursor: none;
+}
+
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .cursor {
+    display: none;
+  }
+
+  html.has-custom-cursor,
+  html.has-custom-cursor body,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button,
+  html.has-custom-cursor [role='button'],
+  html.has-custom-cursor summary,
+  html.has-custom-cursor select,
+  html.has-custom-cursor input,
+  html.has-custom-cursor textarea,
+  html.has-custom-cursor [contenteditable='true'] {
+    cursor: auto;
+  }
+}

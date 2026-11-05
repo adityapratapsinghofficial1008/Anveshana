@@ -1,0 +1,53 @@
+:root {
+  /* Surfaces */
+  --paper: #f7f4ec;
+  --paper-deep: #f1ebdd;
+  --surface: #efebdf;
+  --surface-raised: #fbf9f3;
+  --white: #fffdf8;
+
+  /* Text */
+  --ink: #241f26;
+  --ink-soft: #3b3440;
+  --muted: #6e6570;
+
+  /* Accents */
+  --plum: #5b2e45;
+  --clay: #b4562f;
+  --clay-deep: #8f3f1e;
+  --clay-on-dark: #e39a76;
+  --sage: #55634a;
+  --sage-soft: #dfe4d6;
+  --amber: #d99a2b;
+  --amber-soft: #f6e3bd;
+
+  /* Lines and dark surfaces */
+  --line: #e0dbcb;
+  --line-strong: #cfc8b4;
+  --night: #2a1f2b;
+
+  /* Type */
+  --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'Instrument Sans', 'Segoe UI', system-ui, sans-serif;
+
+  --step-0: clamp(0.98rem, 0.95rem + 0.15vw, 1.06rem);
+  --step-1: clamp(1.15rem, 1.05rem + 0.4vw, 1.35rem);
+  --step-2: clamp(1.45rem, 1.25rem + 0.9vw, 1.9rem);
+  --step-4: clamp(2.3rem, 1.7rem + 3vw, 3.9rem);
+  --step-5: clamp(3rem, 1.9rem + 5.4vw, 5.8rem);
+
+  /* Space */
+  --space-md: 1.5rem;
+
+  /* Layout */
+  --container: 1180px;
+  --header-h: 76px;
+  --section-pad: clamp(4rem, 7vw, 7rem);
+
+  /* Shape and motion */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-soft: 0 24px 60px -38px rgba(42, 31, 43, 0.45);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
