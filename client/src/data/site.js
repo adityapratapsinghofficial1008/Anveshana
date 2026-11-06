@@ -3,7 +3,7 @@ export const SITE = {
   tagline: 'Ask. Share. Build. Together.',
   email: 'theheroadityasingh498@gmail.com',
   mailto: 'mailto:theheroadityasingh498@gmail.com?subject=Joining%20Anveshana',
-  memberCount: 40,
+  memberCount: 50,
 }
 
 export const TAGLINE = ['Ask.', 'Share.', 'Build.', 'Together.']
