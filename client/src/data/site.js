@@ -219,7 +219,5 @@ export const FAQS = {
  * so the footer never ships with dead links.
  */
 export const SOCIAL = [
-  { label: 'WhatsApp', href: '', icon: 'whatsapp' },
-  { label: 'LinkedIn', href: '', icon: 'linkedin' },
-  { label: 'Instagram', href: '', icon: 'instagram' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/anveshana-global/', icon: 'linkedin' },
 ]
