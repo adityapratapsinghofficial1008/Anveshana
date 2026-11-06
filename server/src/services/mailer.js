@@ -48,7 +48,14 @@ export function notifyNewMember(member) {
       subject: `New join request: ${member.name}`,
       text: body,
     })
-    .catch((error) => console.warn(`[mailer] notification failed: ${error.message}`))
+    .then((info) => {
+      console.log(`[mailer] admin notification sent: ${info?.messageId}`)
+      return info
+    })
+    .catch((error) => {
+      console.error(`[mailer] notification failed:`, error)
+      throw error
+    })
 }
 
 /**
@@ -95,5 +102,12 @@ export function sendApplicationReceivedEmail(member) {
       text: textBody,
       html: htmlBody,
     })
-    .catch((error) => console.warn(`[mailer] applicant confirmation failed: ${error.message}`))
+    .then((info) => {
+      console.log(`[mailer] applicant confirmation sent: ${info?.messageId}`)
+      return info
+    })
+    .catch((error) => {
+      console.error(`[mailer] applicant confirmation failed:`, error)
+      throw error
+    })
 }
