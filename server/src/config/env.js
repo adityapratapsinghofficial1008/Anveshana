@@ -35,6 +35,7 @@ export const env = {
     from: read('SMTP_FROM', `Anveshana <${read('SMTP_USER')}>`),
   },
   notifyEmail: read('NOTIFY_EMAIL', 'theheroadityasingh498@gmail.com'),
+  brevoApiKey: read('BREVO_API_KEY'),
 }
 
 export function assertProductionEnv() {

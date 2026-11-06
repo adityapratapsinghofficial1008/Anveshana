@@ -1,30 +1,80 @@
 import nodemailer from 'nodemailer'
 import { env } from '../config/env.js'
 
-const transport =
+/**
+ * Sends an email via Brevo's HTTPS REST API.
+ * Uses port 443 (standard HTTPS), which is NEVER blocked by Render or other cloud hosts.
+ */
+async function sendViaBrevo({ to, subject, text, html }) {
+  const senderEmail = env.smtp.user || env.notifyEmail || 'theheroadityasingh498@gmail.com'
+  const payload = {
+    sender: { name: 'Anveshana', email: senderEmail },
+    to: [{ email: to }],
+    subject,
+    textContent: text,
+    htmlContent: html || undefined,
+  }
+
+  const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      'api-key': env.brevoApiKey,
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+
+  const data = await response.json().catch(() => ({}))
+
+  if (!response.ok) {
+    const errorMsg = data.message || `Brevo API returned status ${response.status}`
+    throw new Error(errorMsg)
+  }
+
+  return { messageId: data.messageId }
+}
+
+const smtpTransport =
   env.smtp.user && env.smtp.pass
     ? nodemailer.createTransport(
-      env.smtp.host === 'smtp.gmail.com'
-        ? {
-          service: 'gmail',
-          auth: { user: env.smtp.user, pass: env.smtp.pass },
-        }
-        : {
-          host: env.smtp.host,
-          port: env.smtp.port || 465,
-          secure: env.smtp.port === 465,
-          auth: { user: env.smtp.user, pass: env.smtp.pass },
-        },
-    )
+        env.smtp.host === 'smtp.gmail.com'
+          ? {
+              service: 'gmail',
+              auth: { user: env.smtp.user, pass: env.smtp.pass },
+            }
+          : {
+              host: env.smtp.host,
+              port: env.smtp.port || 465,
+              secure: env.smtp.port === 465,
+              auth: { user: env.smtp.user, pass: env.smtp.pass },
+            },
+      )
     : null
 
-/**
- * Optional notification to the community inbox. When SMTP is not configured
- * this resolves quietly, so signups never depend on email delivery.
- */
-export function notifyNewMember(member) {
-  if (!transport) return Promise.resolve()
+async function sendMail({ to, subject, text, html }) {
+  if (env.brevoApiKey) {
+    return sendViaBrevo({ to, subject, text, html })
+  }
 
+  if (smtpTransport) {
+    return smtpTransport.sendMail({
+      from: env.smtp.from,
+      to,
+      subject,
+      text,
+      html,
+    })
+  }
+
+  console.warn('[mailer] Neither BREVO_API_KEY nor SMTP configured. Email not sent.')
+  return null
+}
+
+/**
+ * Optional notification to the community inbox.
+ */
+export async function notifyNewMember(member) {
   const body = [
     'Someone just asked to join Anveshana.',
     '',
@@ -38,33 +88,28 @@ export function notifyNewMember(member) {
     `Curious about: ${member.curiosity}`,
     `Building: ${member.building || '—'}`,
     '',
-    `Received: ${member.createdAt.toISOString()}`,
+    `Received: ${member.createdAt ? new Date(member.createdAt).toISOString() : new Date().toISOString()}`,
   ].join('\n')
 
-  return transport
-    .sendMail({
-      from: env.smtp.from,
+  try {
+    const result = await sendMail({
       to: env.notifyEmail,
       subject: `New join request: ${member.name}`,
       text: body,
     })
-    .then((info) => {
-      console.log(`[mailer] admin notification sent: ${info?.messageId}`)
-      return info
-    })
-    .catch((error) => {
-      console.error(`[mailer] notification failed:`, error)
-      throw error
-    })
+    if (result) console.log(`[mailer] admin notification sent: ${result.messageId}`)
+    return result
+  } catch (error) {
+    console.error(`[mailer] admin notification failed:`, error.message)
+    throw error
+  }
 }
 
 /**
  * Confirmation email sent directly to the applicant to let them know
  * their application was received and is under review.
  */
-export function sendApplicationReceivedEmail(member) {
-  if (!transport) return Promise.resolve()
-
+export async function sendApplicationReceivedEmail(member) {
   const firstName = member.name.trim().split(/\s+/)[0] || 'there'
 
   const textBody = [
@@ -72,11 +117,11 @@ export function sendApplicationReceivedEmail(member) {
     '',
     'Thank you for your interest in joining Anveshana!',
     '',
-    'We have received your application and it is currently under process. We review every note personally and will get back to you shortly.',
+    'We have received your application and it is currently under process. We review every application personally and will get back to you shortly.',
     '',
     'Best regards,',
     'The Anveshana Team',
-    'https://anveshana.tech',
+    'https://anveshana-umber.vercel.app',
   ].join('\n')
 
   const htmlBody = `
@@ -94,20 +139,17 @@ export function sendApplicationReceivedEmail(member) {
     </div>
   `
 
-  return transport
-    .sendMail({
-      from: env.smtp.from,
+  try {
+    const result = await sendMail({
       to: member.email,
       subject: 'Application Received — Anveshana',
       text: textBody,
       html: htmlBody,
     })
-    .then((info) => {
-      console.log(`[mailer] applicant confirmation sent: ${info?.messageId}`)
-      return info
-    })
-    .catch((error) => {
-      console.error(`[mailer] applicant confirmation failed:`, error)
-      throw error
-    })
+    if (result) console.log(`[mailer] applicant confirmation sent: ${result.messageId}`)
+    return result
+  } catch (error) {
+    console.error(`[mailer] applicant confirmation failed:`, error.message)
+    throw error
+  }
 }
