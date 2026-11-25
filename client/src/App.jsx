@@ -12,7 +12,6 @@ import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/Navbar";
 import CustomCursor from "./components/ui/CustomCursor";
 import { useScrollReveal } from "./hooks/useScrollReveal";
-import { Analytics } from "@vercel/analytics/next";
 
 export default function App() {
   const scope = useScrollReveal();
@@ -43,7 +42,6 @@ export default function App() {
       </div>
 
       <CustomCursor />
-      <Analytics />
     </>
   );
 }
