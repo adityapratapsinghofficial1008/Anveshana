@@ -1,20 +1,21 @@
-import About from './components/sections/About'
-import CoreMembers from './components/sections/CoreMembers'
-import Faq from './components/sections/Faq'
-import Hero from './components/sections/Hero'
-import HowItWorks from './components/sections/HowItWorks'
-import Join from './components/sections/Join'
-import Manifesto from './components/sections/Manifesto'
-import Topics from './components/sections/Topics'
-import WhatWeDo from './components/sections/WhatWeDo'
-import Who from './components/sections/Who'
-import Footer from './components/layout/Footer'
-import Navbar from './components/layout/Navbar'
-import CustomCursor from './components/ui/CustomCursor'
-import { useScrollReveal } from './hooks/useScrollReveal'
+import About from "./components/sections/About";
+import CoreMembers from "./components/sections/CoreMembers";
+import Faq from "./components/sections/Faq";
+import Hero from "./components/sections/Hero";
+import HowItWorks from "./components/sections/HowItWorks";
+import Join from "./components/sections/Join";
+import Manifesto from "./components/sections/Manifesto";
+import Topics from "./components/sections/Topics";
+import WhatWeDo from "./components/sections/WhatWeDo";
+import Who from "./components/sections/Who";
+import Footer from "./components/layout/Footer";
+import Navbar from "./components/layout/Navbar";
+import CustomCursor from "./components/ui/CustomCursor";
+import { useScrollReveal } from "./hooks/useScrollReveal";
+import { Analytics } from "@vercel/analytics/next";
 
 export default function App() {
-  const scope = useScrollReveal()
+  const scope = useScrollReveal();
 
   return (
     <>
@@ -42,6 +43,7 @@ export default function App() {
       </div>
 
       <CustomCursor />
+      <Analytics />
     </>
-  )
+  );
 }
