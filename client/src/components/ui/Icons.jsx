@@ -52,14 +52,6 @@ export function PlusIcon(props) {
   )
 }
 
-export function CheckIcon(props) {
-  return (
-    <svg {...strokeBase} {...props}>
-      <path d="m5 12.5 4.5 4.5L19 7" />
-    </svg>
-  )
-}
-
 export function WhatsAppIcon(props) {
   return (
     <svg {...fillBase} {...props}>

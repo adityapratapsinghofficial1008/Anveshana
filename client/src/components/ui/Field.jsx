@@ -3,23 +3,18 @@ export default function Field({
   label,
   as: Control = 'input',
   options = [],
-  error,
   optional = false,
   className = '',
   ...rest
 }) {
-  const errorId = `${id}-error`
-
   const sharedProps = {
     id,
     name: rest.name,
     className: `field__control${Control === 'textarea' ? ' field__control--area' : ''}`,
-    'aria-invalid': error ? 'true' : undefined,
-    'aria-describedby': error ? errorId : undefined,
   }
 
   return (
-    <div className={`field${error ? ' field--invalid' : ''} ${className}`.trim()}>
+    <div className={`field ${className}`.trim()}>
       <label className="field__label" htmlFor={id}>
         {label}
         {optional && <span className="field__optional"> (optional)</span>}
@@ -38,12 +33,6 @@ export default function Field({
         <textarea {...sharedProps} {...rest} />
       ) : (
         <input {...sharedProps} {...rest} />
-      )}
-
-      {error && (
-        <p className="field__error" id={errorId} role="alert">
-          {error}
-        </p>
       )}
     </div>
   )
